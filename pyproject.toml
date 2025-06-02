@@ -1,0 +1,27 @@
+[project]
+name = "kao-janken"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mediapipe>=0.10.21",
+    "opencv-python>=4.11.0.86",
+]
+
+[tool.ruff]
+select = [
+    "F", # pyflakes
+    "E", # pycodestyle
+    "W", # pycodestyle warnings
+    "I", # isort
+]
+ignore = []
+line-length = 150
+
+extend-ignore = [
+    "D105", # undocumented-magic-method
+    "D107", # undocumented-public-init
+    "D205", # blank-line-after-summary
+    "D415" # ends-in-punctuation
+]
