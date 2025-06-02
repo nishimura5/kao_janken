@@ -63,20 +63,15 @@ for i in range(10000):
 
     show_img = overlay(mesh_face_img, blend_img)
 
-    # Put counter
     put_str = f"count:{i}"
     cv2.putText(show_img, put_str, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 8)
     cv2.putText(show_img, put_str, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
-    # Display the frame in a window titled 'cam'
     cv2.imshow("cam", show_img)
 
-    # Wait for 1 millisecond and get the key pressed
     key = cv2.waitKey(1)
-    # If 'q' key is pressed, break the loop
     if key == ord("q"):
         break
-    # If 's' key is pressed, save the current frame as a screenshot and break the loop
     elif key == ord("s"):
         cv2.imwrite("photo.png", frame)
         print("saved photo.")
