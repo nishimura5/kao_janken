@@ -1,7 +1,12 @@
+# lesson_8_simple.py: A simplified version of lesson_8.py
+# - No overlay processing or count display, only face mesh detection and drawing
+# - No image blending, NumPy, or os imports
+# - No overlay of face_frame.png
+# This script demonstrates minimal face mesh detection with MediaPipe and OpenCV
+
 import cv2
 
 import face_mesh
-
 
 cap = cv2.VideoCapture()
 print("Open camera...")
