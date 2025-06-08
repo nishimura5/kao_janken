@@ -126,6 +126,15 @@
             "program": "${workspaceRoot}/src/lesson_12.py",
             "windows": { "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe" },
             "osx":    { "python": "${workspaceFolder}/.venv/bin/python" },
+        },
+        {
+            "name": "uv test",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "program": "${workspaceRoot}/src/uv_test.py",
+            "windows": { "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe" },
+            "osx":    { "python": "${workspaceFolder}/.venv/bin/python" },
         }
     ]
 }
