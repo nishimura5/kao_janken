@@ -54,8 +54,8 @@ for i in range(10000):
         print("read failed.")
         break
 
-    frame = frame[:, padding:-padding, :]
-    frame = cv2.flip(frame, 1)
+    crop_frame = frame[:, padding:-padding, :]
+    frame = cv2.flip(crop_frame, 1)
 
     # Face mesh detection and drawing
     detector.find_face_keypoints(frame)

@@ -16,8 +16,8 @@ for i in range(10000):
         break
 
     # frame variable is updated with the cropped and mirrored frame
-    frame = frame[:, padding:-padding, :]
-    frame = cv2.flip(frame, 1)
+    crop_frame = frame[:, padding:-padding, :]
+    frame = cv2.flip(crop_frame, 1)
 
     # Put counter
     put_str = f"count:{i}"

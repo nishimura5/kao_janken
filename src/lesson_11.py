@@ -30,8 +30,8 @@ def main():
             print("read failed.")
             break
 
-        frame = frame[:, padding:-padding, :]
-        frame = cv2.flip(frame, 1)
+        crop_frame = frame[:, padding:-padding, :]
+        frame = cv2.flip(crop_frame, 1)
 
         detector.find_face_keypoints(frame)
         black_img = np.zeros_like(frame)
