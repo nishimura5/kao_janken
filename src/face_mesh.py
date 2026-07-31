@@ -3,6 +3,8 @@ import mediapipe as mp
 
 
 class FaceLandMarks:
+    IRIS_LANDMARK_IDS = range(468, 478)
+
     def __init__(self, staticMode=False, maxFace=1, minDetectionCon=0.5, minTrackCon=0.5):
         self.staticMode = staticMode
         self.maxFace = maxFace
@@ -45,6 +47,12 @@ class FaceLandMarks:
                     landmark_drawing_spec=self.drawSpec,
                     connection_drawing_spec=self.drawSpec,
                 )
+
+                height, width = src_img.shape[:2]
+                for landmark_id in self.IRIS_LANDMARK_IDS:
+                    landmark = face_landmarks.landmark[landmark_id]
+                    center = (int(landmark.x * width), int(landmark.y * height))
+                    cv2.circle(src_img, center, 2, (0, 0, 255), cv2.FILLED)
         return src_img
 
     def get_all_xy(self):
