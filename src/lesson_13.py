@@ -23,7 +23,6 @@ def main():
     height, width, channels = frame.shape
     print(f"frame: {height}x{width}x{channels}")
     padding = (width - height) // 2
-    additional_padding = 100
     gesture_image_size = max(40, int(min(height // 4, 240) * 0.7))
     gesture_images = {gesture: cv2.resize(image, (gesture_image_size, gesture_image_size)) for gesture, image in gesture_images.items()}
 
@@ -39,7 +38,7 @@ def main():
             print("read failed.")
             break
 
-        crop_frame = frame[additional_padding:-additional_padding, padding + additional_padding : -padding - additional_padding, :]
+        crop_frame = frame[:, padding: -padding, :]
         frame = cv2.flip(crop_frame, 1)
 
         detector.find_face_keypoints(frame)
