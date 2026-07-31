@@ -23,16 +23,15 @@ def main():
     height, width, channels = frame.shape
     print(f"frame: {height}x{width}x{channels}")
     padding = (width - height) // 2
+    additional_padding = 100
     gesture_image_size = max(40, int(min(height // 4, 240) * 0.7))
-    gesture_images = {
-        gesture: cv2.resize(image, (gesture_image_size, gesture_image_size))
-        for gesture, image in gesture_images.items()
-    }
+    gesture_images = {gesture: cv2.resize(image, (gesture_image_size, gesture_image_size)) for gesture, image in gesture_images.items()}
 
-    # Initialize NPC's HP and random gesture
+    # Initialize NPC's HP, random gesture, and round counter
     # NPC: Non-Player Character
     npc_hp = 100
     npc_jan = random.choice(["gu", "choki", "pa"])
+    janken_count = 0
 
     for i in range(10000):
         ret, frame = cap.read()
@@ -40,7 +39,7 @@ def main():
             print("read failed.")
             break
 
-        crop_frame = frame[:, padding:-padding, :]
+        crop_frame = frame[additional_padding:-additional_padding, padding + additional_padding : -padding - additional_padding, :]
         frame = cv2.flip(crop_frame, 1)
 
         detector.find_face_keypoints(frame)
@@ -62,6 +61,7 @@ def main():
             next_guchokipa = ["gu", "choki", "pa"]
             next_guchokipa.remove(npc_jan)
             npc_jan = random.choice(next_guchokipa)
+            janken_count += 1
 
         mouths = detector.get_mouth_xy()
         if len(mouths) > 0:
@@ -80,6 +80,11 @@ def main():
             janken_status_str = f"NPC HP:{npc_hp:3d} NPC:{npc_jan} vs YOU:{your_jan}"
             cv2.putText(show_img, janken_status_str, (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 8)
             cv2.putText(show_img, janken_status_str, (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+
+            janken_count_str = str(janken_count)
+            janken_count_position = (50, show_img.shape[0] - 50)
+            cv2.putText(show_img, janken_count_str, janken_count_position, cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 255, 255), 12)
+            cv2.putText(show_img, janken_count_str, janken_count_position, cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 0), 4)
 
             image_top = 140
             image_left = 50
@@ -124,8 +129,7 @@ def draw_gesture_image(dst_img, gesture_img, top_left, label):
 
     dst_img[top:bottom, left:right] = gesture_img
     cv2.rectangle(dst_img, (left, top), (right - 1, bottom - 1), (255, 255, 255), 3)
-    cv2.putText(dst_img, label, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 6)
-    cv2.putText(dst_img, label, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
+    cv2.putText(dst_img, label, (left + 5, top + 21), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
 
 
 def estimate_gesture(mouth):
@@ -135,7 +139,7 @@ def estimate_gesture(mouth):
     distance_0_17 = ((mouth[0][0] - mouth[17][0]) ** 2 + (mouth[0][1] - mouth[17][1]) ** 2) ** 0.5
     distance_78_308 = ((mouth[78][0] - mouth[308][0]) ** 2 + (mouth[78][1] - mouth[308][1]) ** 2) ** 0.5
     ratio = distance_0_17 / distance_78_308
-    if ratio < 0.5:
+    if ratio < 0.4:
         janken = "gu"
     elif ratio > 1.5:
         janken = "choki"
